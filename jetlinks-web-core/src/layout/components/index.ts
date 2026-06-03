@@ -1,0 +1,8 @@
+export { default as User } from './User.vue'
+export { default as Notice } from './Notice.vue'
+export { default as Language } from './Language.vue'
+export { default as Resource } from './Resource.vue'
+export { default as AiChat } from './AiChat/index.vue'
+export { default as LayoutMenuSearch } from './LayoutMenuSearch.vue'
+export { default as LayoutSidebarUser } from './LayoutSidebarUser.vue'
+export { default as HeaderThemeSwitch } from './HeaderThemeSwitch.vue'

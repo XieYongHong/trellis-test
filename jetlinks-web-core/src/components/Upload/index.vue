@@ -1,0 +1,248 @@
+﻿<template>
+    <div class="upload-image-warp">
+        <div class="upload-image-border" :style="borderStyle">
+            <a-upload
+                name="file"
+                list-type="picture-card"
+                class="avatar-uploader"
+                :show-upload-list="false"
+                :before-upload="beforeUpload"
+                @change="handleChange"
+                v-bind="props"
+                :custom-request="uploadByRequest"
+            >
+                <div class="upload-image-content" :style="props.style">
+                    <template v-if="imageUrl">
+                        <img :src="imageUrl" width="100%" class="upload-image" />
+                        <div class="upload-image-mask">{{ $t('Upload.index.805902-0') }}</div>
+                    </template>
+                    <template v-else>
+                        <AIcon
+                            type="LoadingOutlined"
+                            v-if="loading"
+                            style="font-size: var(--fs-20)"
+                        />
+                        <template v-else-if="bgImage">
+                            <div
+                                class="upload-image"
+                                :style="`background-image: url(${bgImage});`"
+                            ></div>
+                            <div class="upload-image-mask">{{ $t('Upload.index.805902-0') }}</div>
+                        </template>
+                        <AIcon
+                            v-else
+                            type="PlusOutlined"
+                            style="font-size: var(--fs-20)"
+                        />
+                    </template>
+                </div>
+            </a-upload>
+            <div class="upload-loading-mask" v-if="props.disabled"></div>
+            <div class="upload-loading-mask" v-if="imageUrl && loading">
+                <AIcon type="LoadingOutlined" style="font-size: var(--fs-20)" />
+            </div>
+        </div>
+    </div>
+  <ImageCropper
+    v-if="cropperVisible"
+    :img="cropperImg"
+    @cancel="cropperVisible = false"
+    @ok="saveImage"
+  />
+</template>
+
+<script lang="ts" setup name='JProUpload'>
+import { UploadChangeParam, UploadProps } from 'ant-design-vue';
+import {getBase64ByImg, onlyMessage} from '@jetlinks-web/utils';
+import { CSSProperties } from 'vue';
+import ImageCropper from './Cropper.vue';
+import { useI18n } from 'vue-i18n';
+import { uploadByRequest } from './utils'
+
+const { t: $t } = useI18n();
+type Emits = {
+    (e: 'update:modelValue', data: string): void;
+    (e: 'change', data: string): void;
+};
+interface JUploadProps extends UploadProps {
+    modelValue: string;
+    disabled?: boolean;
+    types?: string[];
+    errorMessage?: string;
+    size?: number;
+    style?: CSSProperties;
+    bgImage?: string;
+    borderStyle?:CSSProperties;
+}
+
+const emit = defineEmits<Emits>();
+
+const props: JUploadProps = defineProps({
+    modelValue: {
+        type: String,
+        default: '',
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+    bgImage: {
+        type: String,
+        default: '',
+    },
+    accept:{
+        type: String,
+        default: undefined
+    },
+    borderStyle: {
+        type: Object,
+        default: undefined
+    },
+    size: {
+        type: Number,
+        default: undefined,
+    },
+    types: {
+      type: Array,
+      default: undefined
+    }
+});
+
+const loading = ref<boolean>(false);
+const imageUrl = ref<string>(props?.modelValue || '');
+const imageTypes = props.types ? props.types : ['image/jpeg', 'image/png'];
+
+const cropperImg = ref()
+const cropperVisible = ref(false)
+
+watch(
+    () => props.modelValue,
+    (newValue) => {
+        imageUrl.value = newValue;
+    },
+    {
+        deep: true,
+        immediate: true,
+    },
+);
+
+const handleChange = (info: UploadChangeParam) => {
+    if (info.file.status === 'uploading') {
+        loading.value = true;
+    }
+    if (info.file.status === 'done') {
+        imageUrl.value = info.file.response?.result.accessUrl;
+        loading.value = false;
+        emit('update:modelValue', info.file.response?.result.accessUrl);
+        emit('change', info.file.response?.result.accessUrl);
+    }
+    if (info.file.status === 'error') {
+        loading.value = false;
+        onlyMessage($t('Upload.index.805902-1'), 'error');
+    }
+};
+
+const beforeUpload = (file: UploadProps['fileList'][number]) => {
+    const isType = imageTypes.includes(file.type);
+    const maxSize = props.size || 2 // 最大值
+    if (!isType) {
+        if (props.errorMessage) {
+            onlyMessage(props.errorMessage, 'error');
+        } else {
+            onlyMessage($t('Upload.index.805902-2'), 'error');
+        }
+        return false;
+    }
+    const isSize = file.size / 1024 / 1024 < maxSize;
+    if (!isSize) {
+        onlyMessage($t('Upload.index.805902-3', [maxSize]), 'error');
+        return false
+    }
+
+    getBase64ByImg(file, (base64Url) => {
+      cropperImg.value = base64Url
+      cropperVisible.value = true
+    })
+
+    return false;
+};
+
+
+const saveImage = (url: string) => {
+  cropperVisible.value = false
+  imageUrl.value = url
+  emit('update:modelValue', url);
+  emit('change', url);
+}
+</script>
+
+<style scoped>
+.upload-image-warp {
+  display: flex;
+  justify-content: flex-start;
+}
+.upload-image-warp .upload-image-border {
+  position: relative;
+  width: 9.375rem;
+  height: 9.375rem;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.upload-image-warp .upload-image-border:hover {
+  border-color: var(--jet-theme-primary-hover);
+}
+.upload-image-warp .upload-image-border :deep(.ant-upload-picture-card-wrapper) {
+  width: 100%;
+  height: 100%;
+}
+.upload-image-warp .upload-image-border :deep(.ant-upload) {
+  width: 100%;
+  height: 100%;
+}
+.upload-image-warp .upload-image-border .upload-image-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: color-mix(in srgb, var(--ink-1) 6%, transparent);
+  cursor: pointer;
+  padding: var(--space-2);
+}
+.upload-image-warp .upload-image-border .upload-image-content .upload-image-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  color: var(--accent-ink);
+  font-size: var(--fs-16);
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ink-4);
+}
+.upload-image-warp .upload-image-border .upload-image-content .upload-image {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.upload-image-warp .upload-image-border .upload-image-content:hover .upload-image-mask {
+  display: flex;
+}
+.upload-image-warp .upload-loading-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--accent-ink);
+  background-color: var(--ink-4);
+}</style>
