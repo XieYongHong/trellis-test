@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "jetlinks-web-core/vite.config.ts",
+    "jetlinks-web-core/src/vite-env.d.ts",
+    "jetlinks-web-core/configs/**/*.ts"
+  ]
+}
