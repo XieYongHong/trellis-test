@@ -12,4 +12,4 @@
 
 ## Scaffold Decision
 
-The initial `modules/page-ui` scaffold exposes empty `getAsyncRoutesMap`, `getExtraRoutesMap`, `register`, `baseMenu`, and locale entries. Concrete project workspace routes and business pages are intentionally left for the follow-up workspace-shell and child-page tasks.
+The initial `modules/page-ui` scaffold exposes empty `getAsyncRoutesMap`, `getExtraRoutesMap`, `register`, `baseMenu`, and locale entries. Concrete project workspace routes are now owned by the first business page task (`06-03-project-space-situation`), while the remaining business pages own their child-page content.

@@ -20,8 +20,6 @@
   "subtasks": [],
   "children": [
     "06-03-page-ui-module-scaffold",
-    "06-03-project-workspace-shell",
-    "06-03-project-shared-components",
     "06-03-project-space-situation",
     "06-03-project-iot-overview",
     "06-03-project-device-groups",

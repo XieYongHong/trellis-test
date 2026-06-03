@@ -40,16 +40,14 @@
 | Order | Task | Purpose | Depends On |
 | --- | --- | --- | --- |
 | 1 | `06-03-page-ui-module-scaffold` | 创建 `modules/page-ui` 子模块骨架、package、index 导出与本地路由/菜单注册入口 | none |
-| 2 | `06-03-project-workspace-shell` | 在 `page-ui` 中建立父工作区路由、子路由和项目内导航壳 | scaffold |
-| 3 | `06-03-project-shared-components` | 在 `page-ui` 中建立共享数据结构、状态 chip/card/list 等展示组件 | scaffold, shell |
-| 4 | `06-03-project-space-situation` | 实现空间态势子页 | shell, shared |
-| 5 | `06-03-project-iot-overview` | 实现物联设备总览子页 | shell, shared |
-| 6 | `06-03-project-device-groups` | 实现设备分组子页 | shell, shared |
-| 7 | `06-03-project-device-health` | 实现设备健康子页 | shell, shared |
-| 8 | `06-03-project-video-resources` | 实现视频资源子页 | shell, shared |
-| 9 | `06-03-project-screen-playback` | 实现画面与回放子页 | shell, shared, video resources |
-| 10 | `06-03-project-i18n-menu-copy` | 收敛页面标题、菜单与中英文文案 | all page tasks |
-| 11 | `06-03-project-responsive-qa` | 响应式、构建、浏览器冒烟和最终验收 | all implementation tasks |
+| 2 | `06-03-project-space-situation` | 建立项目工作区入口/导航壳并实现空间态势子页 | scaffold |
+| 3 | `06-03-project-iot-overview` | 实现物联设备总览子页 | scaffold, space situation |
+| 4 | `06-03-project-device-groups` | 实现设备分组子页 | scaffold, space situation |
+| 5 | `06-03-project-device-health` | 实现设备健康子页 | scaffold, space situation |
+| 6 | `06-03-project-video-resources` | 实现视频资源子页 | scaffold, space situation |
+| 7 | `06-03-project-screen-playback` | 实现画面与回放子页 | scaffold, space situation, video resources |
+| 8 | `06-03-project-i18n-menu-copy` | 收敛页面标题、菜单与中英文文案 | all page tasks |
+| 9 | `06-03-project-responsive-qa` | 响应式、构建、浏览器冒烟和最终验收 | all implementation tasks |
 
 ## Cross-Task Constraints
 
@@ -59,7 +57,7 @@
 * 状态先于字段，卡片/列表中使用 chip/badge，不用裸文字作为主要状态信号。
 * 禁止默认堆叠 “4 KPI + 顶部搜索 + 大表格”。
 * 不引入完整编辑弹窗；第一阶段以只读态势和资源查看为主。
-* 静态/模拟数据必须集中管理，不散落在模板中。
+* 静态/模拟数据必须集中管理，不散落在模板中；共享展示组件在业务页实现时按需抽取，不预设独立任务。
 * 后续接真实接口时，再单独创建 API 接入任务。
 
 ## Acceptance Criteria
