@@ -122,6 +122,132 @@ export const Demo: RouteRecordRaw = {
     title: 'Demo'
   }
 }
+
+export const ProjectWorkspace: RouteRecordRaw = {
+  path: '/project-workspace',
+  name: 'ProjectWorkspace',
+  redirect: '/project-workspace/space-situation',
+  component: () => import('@jetlinks-web-core/layout/BasicLayoutPage.vue'),
+  meta: {
+    title: '项目'
+  },
+  children: [
+    {
+      path: '/project-workspace/space-situation',
+      name: 'ProjectSpaceSituation',
+      redirect: '/project-workspace/space-situation/index',
+      component: () => import('@jetlinks-web-core/views/project/index.vue'),
+      meta: {
+        title: '空间态势'
+      },
+      children: [
+        {
+          path: '/project-workspace/space-situation/index',
+          name: 'ProjectSpaceSituationIndex',
+          meta: {
+            title: '空间态势'
+          },
+          component: () => import('@jetlinks-web-core/views/project/space-situation/index.vue')
+        }
+      ]
+    },
+    {
+      path: '/project-workspace/iot-overview',
+      name: 'ProjectIotOverview',
+      redirect: '/project-workspace/iot-overview/index',
+      component: () => import('@jetlinks-web-core/views/project/index.vue'),
+      meta: {
+        title: '设备总览'
+      },
+      children: [
+        {
+          path: '/project-workspace/iot-overview/index',
+          name: 'ProjectIotOverviewIndex',
+          meta: {
+            title: '设备总览'
+          },
+          component: () => import('@jetlinks-web-core/views/project/iot-overview/index.vue')
+        }
+      ]
+    },
+    {
+      path: '/project-workspace/device-groups',
+      name: 'ProjectDeviceGroups',
+      redirect: '/project-workspace/device-groups/index',
+      component: () => import('@jetlinks-web-core/views/project/index.vue'),
+      meta: {
+        title: '设备分组'
+      },
+      children: [
+        {
+          path: '/project-workspace/device-groups/index',
+          name: 'ProjectDeviceGroupsIndex',
+          meta: {
+            title: '设备分组'
+          },
+          component: () => import('@jetlinks-web-core/views/project/device-groups/index.vue')
+        }
+      ]
+    },
+    {
+      path: '/project-workspace/device-health',
+      name: 'ProjectDeviceHealth',
+      redirect: '/project-workspace/device-health/index',
+      component: () => import('@jetlinks-web-core/views/project/index.vue'),
+      meta: {
+        title: '设备健康'
+      },
+      children: [
+        {
+          path: '/project-workspace/device-health/index',
+          name: 'ProjectDeviceHealthIndex',
+          meta: {
+            title: '设备健康'
+          },
+          component: () => import('@jetlinks-web-core/views/project/device-health/index.vue')
+        }
+      ]
+    },
+    {
+      path: '/project-workspace/video-resources',
+      name: 'ProjectVideoResources',
+      redirect: '/project-workspace/video-resources/index',
+      component: () => import('@jetlinks-web-core/views/project/index.vue'),
+      meta: {
+        title: '视频资源'
+      },
+      children: [
+        {
+          path: '/project-workspace/video-resources/index',
+          name: 'ProjectVideoResourcesIndex',
+          meta: {
+            title: '视频资源'
+          },
+          component: () => import('@jetlinks-web-core/views/project/video-resources/index.vue')
+        }
+      ]
+    },
+    {
+      path: '/project-workspace/screen-playback',
+      name: 'ProjectScreenPlayback',
+      redirect: '/project-workspace/screen-playback/index',
+      component: () => import('@jetlinks-web-core/views/project/index.vue'),
+      meta: {
+        title: '画面与回放'
+      },
+      children: [
+        {
+          path: '/project-workspace/screen-playback/index',
+          name: 'ProjectScreenPlaybackIndex',
+          meta: {
+            title: '画面与回放'
+          },
+          component: () => import('@jetlinks-web-core/views/project/screen-playback/index.vue')
+        }
+      ]
+    }
+  ]
+}
 //
 // export const Scene: RouteRecordRaw = {
 //   path: '/scene',
